@@ -1,0 +1,70 @@
+<?php
+
+$title = 'Edit News';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<script>
+  $( function() {
+        $( "input[name=date]" ).datepicker({dateFormat:'yy-mm-dd'});
+  } );
+</script>
+<?php
+$theme_id = $form->get('theme_id');
+$theme_id->setAttribute('class', 'form-control');
+
+$date = $form->get('date');
+$date->setAttribute('class', 'form-control');
+$date->setAttribute('placeholder', 'News date');
+
+$title_news = $form->get('title');
+$title_news->setAttribute('class', 'form-control');
+$title_news->setAttribute('placeholder', 'News title');
+
+// This provides a default CSS class and placeholder text for the artist element:
+$text = $form->get('text');
+$text->setAttribute('class', 'form-control');
+$text->setAttribute('placeholder', 'Text');
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('news', [
+    'action' => 'edit',
+    'news_id'     => $id,
+]));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<?php // Wrap the elements in divs marked as form groups, and render the
+      // label, element, and errors separately within ?>
+<div class="form-group">
+    <?= $this->formLabel($theme_id) ?>
+    <?= $this->formElement($theme_id) ?>
+    <?= $this->formElementErrors()->render($theme_id, ['class' => 'help-block']) ?>
+</div>
+<div class="form-group">
+    <?= $this->formLabel($date) ?>
+    <?= $this->formElement($date) ?>
+    <?= $this->formElementErrors()->render($date, ['class' => 'help-block']) ?>
+</div>
+<div class="form-group">
+    <?= $this->formLabel($title_news) ?>
+    <?= $this->formElement($title_news) ?>
+    <?= $this->formElementErrors()->render($title_news, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($text) ?>
+    <?= $this->formElement($text) ?>
+    <?= $this->formElementErrors()->render($text, ['class' => 'help-block']) ?>
+</div>
+
+<?php
+echo $this->formSubmit($submit);
+echo $this->formHidden($form->get('news_id'));
+echo $this->form()->closeTag();

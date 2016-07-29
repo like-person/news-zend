@@ -1,0 +1,23 @@
+<?php
+// module/Album/view/news/news/delete.phtml:
+
+$title = 'Delete news';
+$url   = $this->url('news', ['action' => 'delete', 'id' => $id]);
+
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+<p>
+    Are you sure that you want to delete
+    "<?= $this->escapeHtml($news->title) ?>" //
+    "<?= $this->escapeHtml($news->date) ?>"?
+</p>
+
+<form action="<?= $url ?>" method="post">
+<div class="form-group">
+    <input type="hidden" name="news_id" value="<?= (int) $news->news_id ?>" />
+    <input type="submit" class="btn btn-danger" name="del" value="Yes" />
+    <input type="submit" class="btn btn-success" name="del" value="No" />
+</div>
+</form>

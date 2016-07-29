@@ -1,0 +1,17 @@
+<?php
+
+$title = 'Новость: '.$new->title;
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+
+<div class="row">
+        <h3><?= $this->escapeHtml($new->title) ?></h3>
+        <div><?= $this->escapeHtml($new->date) ?>, <b><?= $this->escapeHtml($new->theme_title) ?></b></div>
+        <div><?= $new->text ?></div>
+        <div class="text-right">
+            <a href="<?= $this->url('listnews') ?>">все новости</a>
+        </div>
+</div>
+

@@ -1,0 +1,50 @@
+<?php
+$title = 'Новости';
+$this->headTitle($title);
+?>
+<div class="row">
+    <div class="col-md-2">
+        <div class="row" style="margin-top: 20px"><b>Публикации по дате:</b></div>
+        <?php 
+        $old_year = $out = '';
+        foreach ($dates as $date) 
+        {
+            if( $old_year != $date->year )
+            {
+                $out .= '<div class="row"><a href="'.$this->url('listnews', ['action' => 'year', 'num' => $date->year]).'">'.$date->year.'</a></div>';
+                $old_year = $date->year;
+            }
+            $out .= '<div class="row" style="padding-left:30px"><a href="'.$this->url('listnews', ['action' => 'month', 'num' => $date->year.$date->nmonth]).'">'.$date->month.' ('.$date->cnt_month.')</a></div>';
+        }        
+        echo $out;
+        
+        ?>
+        <div class="row" style="margin-top: 20px"><b>Публикации по теме:</b></div>
+        <?php foreach ($themes as $theme) : ?>
+            <div class="row">
+                    <a href="<?= $this->url('listnews', ['action' => 'theme', 'num' => $theme->theme_id]) ?>"><?= $theme->theme_title?> (<?= $theme->cnt_theme?>)</a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <div class="col-md-10">
+        <h1><?= $this->escapeHtml($title) ?></h1>
+
+        <?php foreach ($listnews as $new) : ?>
+            <div class="row">
+                <h3><?= $this->escapeHtml($new->title) ?></h3>
+                <div><?= $this->escapeHtml($new->date) ?>, <?= $this->escapeHtml($new->theme_title) ?></div>
+                <div><?= mb_substr($this->escapeHtml($new->text), 0, 255) ?></div>
+                <div class="text-right">
+                    <a href="<?= $this->url('listnews', ['action' => 'more', 'num' => $new->news_id]) ?>">читать далее</a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <div class="row text-center">
+            <?=
+            $this->paginationControl(
+                    $this->paginator, 'All', 'my_pagination_control', ['route' => 'listnews','action' => 'index', 'num'=>0]
+            )
+            ?>
+        </div>
+    </div>
+</div>
