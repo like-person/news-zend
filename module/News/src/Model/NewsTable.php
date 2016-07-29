@@ -1,4 +1,5 @@
 <?php
+//Класс функций для работы с новостями
 namespace News\Model;
 
 use RuntimeException;
@@ -16,13 +17,14 @@ class NewsTable
     {
         $this->tableGateway = $tableGateway;
     }
-
+    //Все новости сортированные по дате
     public function fetchAll()
     {
         return $this->tableGateway->select(function (Select $select) {
             $select->order('date DESC');
        });
     }
+    //Все новости с темами
     public function getAllNews()
     {
         return $this->tableGateway->select(function (Select $select) {
@@ -30,26 +32,31 @@ class NewsTable
             $select->order('date DESC');
        });
     }
+    //Новости по теме, разделенные постранично
     public function getNewsTheme($theme)
     {
         $select = new MyTableGateaway( $this->tableGateway, 'news.theme_id ='.$theme, 'date DESC');
         return new Paginator( $select );
     }    
+    //Новости за год, разделенные постранично
     public function getNewsYear($year)
     {
         $select = new MyTableGateaway( $this->tableGateway, 'date like \''.$year.'%\'', 'date DESC');
         return new Paginator( $select );
     }
+    //Новости за месяц, разделенные постранично
     public function getNewsMonth($year)
     {
         $select = new MyTableGateaway( $this->tableGateway, 'date like \''.substr($year,0,4).'-'.substr($year,4).'%\'', 'date DESC');
         return new Paginator( $select );
     }
+    //Все новости, разделенные постранично
     public function getPaginator()
     {
         $select = new MyTableGateaway( $this->tableGateway, null, 'date DESC' );
         return new Paginator( $select );
     }
+    //Информация о новости с ИД $id
     public function getNews($id)
     {
         $this->id = (int) $id;
@@ -67,7 +74,7 @@ class NewsTable
 
         return $row;
     }
-
+    //Добавления/изменение в таблице новостей
     public function saveNews(News $news)
     {       
         $data = [
@@ -93,7 +100,7 @@ class NewsTable
 
         $this->tableGateway->update($data, ['news_id' => $id]);
     }
-
+    //Удаление из таблицы новостей
     public function deleteNews($id)
     {
         $this->tableGateway->delete(['news_id' => (int) $id]);

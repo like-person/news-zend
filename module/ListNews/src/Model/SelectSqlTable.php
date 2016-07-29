@@ -1,4 +1,5 @@
 <?php
+//Модель для выполения свободных SQL-запросов
 namespace ListNews\Model;
 
 use Zend\Db\Adapter\Adapter;

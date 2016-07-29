@@ -1,4 +1,5 @@
 <?php
+//Контроллер для вывода новостей
 namespace ListNews\Controller;
 
 use News\Model\NewsTable;
@@ -11,21 +12,23 @@ class ListNewsController extends AbstractActionController
 {
     // Add this property:
     private $table;
-    public $dates;
 
     // Add this constructor:
     public function __construct(NewsTable $table)
     {
         $this->table = $table;
-        $this->dates = clone $table;
     }
+    //Постраничный вывод всех новостей
     public function indexAction()
     {                
         $paginator = $this->table->getPaginator();
+        
+        //Количество новостей на странице
         $paginator->setItemCountPerPage(5);
         $page = $this->params()->fromRoute('page');
         $paginator->setCurrentPageNumber($page);
         
+        //Данные для левого меню
         $dates = new SelectSqlTable();
         $themes = new SelectSqlTable();
         
@@ -36,6 +39,7 @@ class ListNewsController extends AbstractActionController
             'paginator' => $paginator,
         ]);
     }
+    //Подробная новость
     public function moreAction()
     {
         $id = (int) $this->params()->fromRoute('num', 0);
@@ -43,19 +47,23 @@ class ListNewsController extends AbstractActionController
             return $this->redirect()->toRoute('listnews');
         }
         $news = $this->table->getNews($id);
-        /*
+        
         try {
             $news = $this->table->getNews($id);
         } catch (\Exception $e) {
             return $this->redirect()->toRoute('listnews');
-        }*/
+        }
         return new ViewModel([
             'new' => $news,
         ]);
     }
+    //Постраничный вывод новостей по теме
     public function themeAction()
     {         
-        $theme_id = (int) $this->params()->fromRoute('num', 0);        
+        $theme_id = (int) $this->params()->fromRoute('num', 0);  
+        if ( empty($theme_id ) ) {
+            return $this->redirect()->toRoute('listnews');
+        }
         $paginator = $this->table->getNewsTheme($theme_id);
         $paginator->setItemCountPerPage(5);
         $page = $this->params()->fromRoute('page');
@@ -71,9 +79,13 @@ class ListNewsController extends AbstractActionController
             'year' => $theme_id,
         ]);
     }
+    //Постраничный вывод новостей за определнный год
     public function yearAction()
-    {         
+    { 
         $year = (int) $this->params()->fromRoute('num', 0);        
+        if ( empty($year ) ) {
+            return $this->redirect()->toRoute('listnews');
+        }        
         $paginator = $this->table->getNewsYear($year);
         $paginator->setItemCountPerPage(5);
         $page = $this->params()->fromRoute('page');
@@ -90,9 +102,13 @@ class ListNewsController extends AbstractActionController
             'year' => $year,
         ]);
     }
+    //Постраничный вывод новостей за определнный месяц
     public function monthAction()
     {         
-        $year = (int) $this->params()->fromRoute('num', 0);        
+        $year = (int) $this->params()->fromRoute('num', 0); 
+        if ( empty($year ) ) {
+            return $this->redirect()->toRoute('listnews');
+        }
         $paginator = $this->table->getNewsMonth($year);
         $paginator->setItemCountPerPage(5);
         $page = $this->params()->fromRoute('page');

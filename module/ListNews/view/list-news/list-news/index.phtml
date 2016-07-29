@@ -1,8 +1,10 @@
 <?php
+//Представления для постраничного вывода всех новостей
 $title = 'Новости';
 $this->headTitle($title);
 ?>
 <div class="row">
+    <!-- Левая колонка меню с годами, месяцами и темами новостей -->
     <div class="col-md-2">
         <div class="row" style="margin-top: 20px"><b>Публикации по дате:</b></div>
         <?php 
@@ -26,6 +28,7 @@ $this->headTitle($title);
             </div>
         <?php endforeach; ?>
     </div>
+    <!-- Правая колонка контента -->
     <div class="col-md-10">
         <h1><?= $this->escapeHtml($title) ?></h1>
 
@@ -39,6 +42,7 @@ $this->headTitle($title);
                 </div>
             </div>
         <?php endforeach; ?>
+        <!-- Постраничный навигатор -->
         <div class="row text-center">
             <?=
             $this->paginationControl(

@@ -1,4 +1,5 @@
 <?php
+//Класс формирования таблицы новостей вместе с темами, используется для компонента постраничного отображения
 namespace News\Model;
 
 use Zend\Paginator\Adapter\DbSelect;

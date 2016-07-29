@@ -1,4 +1,5 @@
 <?php
+//Класс формы добавления/удаления новости
 namespace News\Form;
 
 use Zend\Form\Form;

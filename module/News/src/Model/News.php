@@ -1,4 +1,5 @@
 <?php
+//Класс модели News, поля и ограничения по полям
 namespace News\Model;
 use DomainException;
 use Zend\Filter\StringTrim;

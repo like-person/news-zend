@@ -1,4 +1,5 @@
 <?php
+//Контроллер для работы админского модуля
 namespace News\Controller;
 
 use News\Model\NewsTable;
@@ -18,40 +19,40 @@ class NewsController extends AbstractActionController
     {
         $this->table = $table;
     }
+    //Список новостей для редактирования и удаления
     public function indexAction()
-    {
+    {        
         return new ViewModel([
             'news' => $this->table->fetchAll(),
         ]);
     }
-
+    //Добавление новости
     public function addAction()
-    {
-        $themes = new SelectSqlTable();
+    {        
+        //Формирование формы со списком тем
+        $themes = new SelectSqlTable();       
         $form = new NewsForm($themes->Sql('SELECT * FROM themes'));
         $form->get('submit')->setValue('Add');
 
+        //Добавление новости через модель News и NewsTable
         $request = $this->getRequest();
-
         if (! $request->isPost()) {
             return ['form' => $form];
         }
-
         $news = new News();
         $form->setInputFilter($news->getInputFilter());
         $form->setData($request->getPost());
-
         if (! $form->isValid()) {
             return ['form' => $form];
         }
-
         $news->exchangeArray($form->getData());
         $this->table->saveNews($news);
+        
         return $this->redirect()->toRoute('news');
     }
-
+    //Редактирование новости
     public function editAction()
-    {
+    {        
         $id = (int) $this->params()->fromRoute('news_id', 0);
         $request = $this->getRequest();
         if( empty($id) ) $id = (int) $request->getPost('news_id');
@@ -60,6 +61,7 @@ class NewsController extends AbstractActionController
             return $this->redirect()->toRoute('news', ['action' => 'add']);
         }
 
+        //Выборка инфы о новости
         try {
             $news = $this->table->getNews($id);
         } catch (\Exception $e) {
@@ -89,9 +91,9 @@ class NewsController extends AbstractActionController
         // Redirect to news list
         return $this->redirect()->toRoute('news', ['action' => 'index']);
     }
-
+    //Удаление новости
     public function deleteAction()
-    {
+    {        
         $id = (int) $this->params()->fromRoute('news_id', 0);
         if (!$id) {
             $request = $this->getRequest();
